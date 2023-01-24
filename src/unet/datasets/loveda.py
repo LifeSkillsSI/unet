@@ -18,13 +18,14 @@ def normalize(input_image, input_mask):
 
 
 def load_image_train(x):
+    w = int(x)
     input_image = tf.image.resize(tf.io.decode_png(
         tf.io.read_file(
-            os.path.join(TRAIN_DIR, "images", str(int(x))+".png"
+            os.path.join(TRAIN_DIR, "images", str(w)+".png"
     )), channels=3), IMAGE_SIZE)
     input_mask = tf.image.resize(tf.io.decode_png(
         tf.io.read_file(
-            os.path.join(TRAIN_DIR, "masks", str(int(x))+".png"
+            os.path.join(TRAIN_DIR, "masks", str(w)+".png"
     )), channels=1), IMAGE_SIZE)
 
     if tf.random.uniform(()) > 0.5:
@@ -37,13 +38,14 @@ def load_image_train(x):
 
 
 def load_image_validate(x):
+    w = int(x)
     input_image = tf.image.resize(tf.io.decode_png(
         tf.io.read_file(
-            os.path.join(VALIDATE_DIR, "images", int(x)+".png"
+            os.path.join(VALIDATE_DIR, "images", str(w)+".png"
     )), channels=3), IMAGE_SIZE)
     input_mask = tf.image.resize(tf.io.decode_png(
         tf.io.read_file(
-            os.path.join(VALIDATE_DIR, "masks", int(x)+".png"
+            os.path.join(VALIDATE_DIR, "masks", str(w)+".png"
     )), channels=1), IMAGE_SIZE)
 
     input_image, input_mask = normalize(input_image, input_mask)
