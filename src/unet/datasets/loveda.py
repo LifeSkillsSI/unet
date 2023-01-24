@@ -13,7 +13,7 @@ classes = 7
 
 def normalize(input_image, input_mask):
     input_image = tf.cast(input_image, tf.float32) / 255.0
-    input_image = tf.cast(input_mask, tf.float32) / 255.0
+    input_mask = tf.cast(input_mask, tf.float32) / 255.0
     return input_image, input_mask
 
 
