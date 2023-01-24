@@ -31,28 +31,27 @@ def load_image_train(x):
     return input_image, input_mask
 
 
-def load_image_test(x):
-    (test_dir, number) = x
-    input_image = tf.image.resize(tf.io.decode_png(os.path.join(test_dir, "images", str(number+".png"))), IMAGE_SIZE)
-    input_mask = tf.image.resize(tf.io.decode_png(os.path.join(test_dir, "masks", str(number+".png"))), IMAGE_SIZE)
+def load_image_validate(x):
+    (validate_dir, number) = x
+    image = tf.image.resize(tf.io.decode_png(os.path.join(validate_dir, "images", str(number+".png"))), IMAGE_SIZE)
 
-    input_image, input_mask = normalize(input_image, input_mask)
+    image, input_mask = normalize(image, 1)
 
-    return input_image, input_mask
+    return image
 
 
-def load_data(train_dir, test_dir, train_count, test_count, **kwargs) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
+def load_data(train_dir, validate_dir, train_count, validate_count, **kwargs) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
     train_l = []
     for i in range(train_count):
         train_l.append((train_dir, i))
-    test_l = []
-    for i in range(test_count):
-        test_l.append((test_dir, i))
+    validate_l = []
+    for i in range(validate_count):
+        validate_l.append((validate_dir, i))
     
     train = tf.data.Dataset.from_tensor_slices(train_l)
-    test = tf.data.Dataset.from_tensor_slices(test_l)
+    validate = tf.data.Dataset.from_tensor_slices(validate_l)
 
     train = train.map(load_image_train)
-    test = test.map(load_image_test)
+    validate = validate.map(load_image_validate)
 
-    return train, test
+    return train, validate
