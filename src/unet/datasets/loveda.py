@@ -33,11 +33,12 @@ def load_image_train(x):
 
 def load_image_validate(x):
     (validate_dir, number) = x
-    image = tf.image.resize(tf.io.decode_png(os.path.join(validate_dir, "images", str(number+".png"))), IMAGE_SIZE)
+    input_image = tf.image.resize(tf.io.decode_png(os.path.join(validate_dir, "images", str(number+".png"))), IMAGE_SIZE)
+    input_mask = tf.image.resize(tf.io.decode_png(os.path.join(validate_dir, "masks", str(number+".png"))), IMAGE_SIZE)
 
-    image, input_mask = normalize(image, 1)
+    input_image, input_mask = normalize(input_image, input_mask)
 
-    return image
+    return input_image, input_mask
 
 
 def load_data(train_dir, validate_dir, train_count, validate_count, **kwargs) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
