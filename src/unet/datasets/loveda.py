@@ -57,4 +57,6 @@ def load_data(train_dir, validate_dir, train_count, validate_count, **kwargs) ->
     train = train.map(load_image_train)
     validate = validate.map(load_image_validate)
 
-    return train, validate
+    train_dataset = train.cache().shuffle(1000).take(train_count)
+
+    return train_dataset, validate
